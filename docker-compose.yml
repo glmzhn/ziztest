@@ -76,7 +76,9 @@ services:
       context: .
     hostname: flower
     entrypoint: celery
-    command: celery -A zhtest.celery_app flower --loglevel=info
+    command: -A zhtest.celery_app flower
+    volumes:
+      - .:/app
     links:
       - redis
     depends_on:
@@ -85,6 +87,8 @@ services:
       - "5555:5555"
     environment:
       - DJANGO_SETTINGS_MODULE=zhtest.settings
+    networks:
+      - backend
 
 volumes:
   postgres_data:

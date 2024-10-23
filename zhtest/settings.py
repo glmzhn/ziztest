@@ -33,6 +33,8 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'unfold',
+
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -40,7 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'myapp',
-    'unfold'
+    'drf_spectacular',
 ]
 
 MIDDLEWARE = [
@@ -141,6 +143,8 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+
 }
 
 SIMPLE_JWT = {
@@ -164,3 +168,11 @@ CACHES = {
         }
     }
 }
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'WebApp API'
+}
+
+CACHE_VIEW_KEY_PREFIX = ":1:views.decorators.cache"
+
+CACHE_TIMEOUT = 300

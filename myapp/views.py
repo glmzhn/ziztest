@@ -1,47 +1,75 @@
 from rest_framework import viewsets
-from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
+
 from .models import Task, Notification
 from .serializers import TaskSerializer, NotificationSerializer
-from django_redis import get_redis_connection
-from django.core.cache import cache
+from drf_spectacular.utils import extend_schema
+from zhtest.utils import delete_cache
+from zhtest.settings import CACHE_TIMEOUT
+from django.views.decorators.cache import cache_page
+from django.utils.decorators import method_decorator
 
 
 class TaskViewSet(viewsets.ModelViewSet):
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
+    permission_classes = [IsAuthenticated]
+    KEY_PREFIX = 'tasks-viewset-list'
 
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
+    @method_decorator(cache_page(CACHE_TIMEOUT, key_prefix=KEY_PREFIX))
+    @extend_schema(operation_id='api_v1_tasks_list')
     def list(self, request, *args, **kwargs):
-        user = request.user
-        cache_key = f'user_tasks_{user.id}'
-        redis_cache = get_redis_connection("default")
-        cached_tasks = redis_cache.get(cache_key)
-
-        if cached_tasks:
-            return Response(cached_tasks)
-
         response = super().list(request, *args, **kwargs)
-        redis_cache.set(cache_key, response.data, timeout=60*5)
         return response
 
+    @extend_schema(operation_id='api_v1_task_create')
     def create(self, request, *args, **kwargs):
         response = super().create(request, *args, **kwargs)
-        cache_key = f'user_tasks_{request.user.id}'
-        cache.delete(cache_key)
+        delete_cache(self.KEY_PREFIX)
         return response
 
+    @extend_schema(operation_id='api_v1_task_update')
     def update(self, request, *args, **kwargs):
         response = super().update(request, *args, **kwargs)
-        cache_key = f'user_tasks_{request.user.id}'
-        cache.delete(cache_key)
+        delete_cache(self.KEY_PREFIX)
         return response
 
+    @extend_schema(operation_id='api_v1_task_delete')
     def destroy(self, request, *args, **kwargs):
         response = super().destroy(request, *args, **kwargs)
-        cache_key = f'user_tasks_{request.user.id}'
-        cache.delete(cache_key)
+        delete_cache(self.KEY_PREFIX)
         return response
 
 
 class NotificationViewSet(viewsets.ModelViewSet):
     queryset = Notification.objects.all()
     serializer_class = NotificationSerializer
+    permission_classes = [IsAuthenticated]
+    KEY_PREFIX = 'notifications-viewset-list'
+
+    @method_decorator(cache_page(CACHE_TIMEOUT, key_prefix=KEY_PREFIX))
+    @extend_schema(operation_id='api_v1_notifications_list')
+    def list(self, request, *args, **kwargs):
+        response = super().list(request, *args, **kwargs)
+        return response
+
+    @extend_schema(operation_id='api_v1_notification_create')
+    def create(self, request, *args, **kwargs):
+        response = super().create(request, *args, **kwargs)
+        delete_cache(self.KEY_PREFIX)
+        return response
+
+    @extend_schema(operation_id='api_v1_notification_update')
+    def update(self, request, *args, **kwargs):
+        response = super().update(request, *args, **kwargs)
+        delete_cache(self.KEY_PREFIX)
+        return response
+
+    @extend_schema(operation_id='api_v1_notification_delete')
+    def destroy(self, request, *args, **kwargs):
+        response = super().destroy(request, *args, **kwargs)
+        delete_cache(self.KEY_PREFIX)
+        return response
