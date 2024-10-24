@@ -6,13 +6,11 @@ Deploy
 
 3 step - run command `docker-compose build`
 
-4 step - run command `docker-compose run --rm web sh -c "python manage.py makemigrations"`
+4 step - run command `docker-compose run --rm web sh -c "python manage.py migrate"`
 
-5 step - run command `docker-compose run --rm web sh -c "python manage.py migrate"`
+5 step - run command `docker-compose run --rm web sh -c "python manage.py createsuperuser"`
 
-6 step - run command `docker-compose run --rm web sh -c "python manage.py createsuperuser"`
-
-7 step - after creating super user run command `docker-compose up`
+6 step - after creating super user run command `docker-compose up`
 
 --------------------------------------------------------------------------------------------------------------------------------------------------------|
 API Work
