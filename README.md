@@ -13,7 +13,7 @@ Deploy
 6 step - after creating super user run command `docker-compose up`
 
 --------------------------------------------------------------------------------------------------------------------------------------------------------|
-API Work
+ API Work
 
 Get JWT Bearer token, path: /api/token/, if it's expired get the new access token via refresh token, path: /api/token/refresh/
 
