@@ -2,15 +2,17 @@ Deploy
 
 1 step - clone repo
 
-2 step - run command `docker-compose build`
+2 step - create .env file with "DB_NAME", DB_USER" and "DB_PASSWORD" settings
 
-3 step - run command `docker-compose run --rm web sh -c "python manage.py makemigrations"`
+3 step - run command `docker-compose build`
 
-4 step - run command `docker-compose run --rm web sh -c "python manage.py migrate"`
+4 step - run command `docker-compose run --rm web sh -c "python manage.py makemigrations"`
 
-5 step - run command `docker-compose run --rm web sh -c "python manage.py createsuperuser"`
+5 step - run command `docker-compose run --rm web sh -c "python manage.py migrate"`
 
-6 step - after creating super user run command `docker-compose up`
+6 step - run command `docker-compose run --rm web sh -c "python manage.py createsuperuser"`
+
+7 step - after creating super user run command `docker-compose up`
 
 --------------------------------------------------------------------------------------------------------------------------------------------------------|
 API Work
