@@ -1,4 +1,4 @@
-Deploy
+Deploy/
 
 1 step - clone repo
 
@@ -12,9 +12,8 @@ Deploy
 
 6 step - after creating super user run command `docker-compose up`
 
---------------------------------------------------------------------------------------------------------------------------------------------------------|
 
-API Work
+API Work/
 
 Get JWT Bearer token, path: /api/token/, if it's expired get the new access token via refresh token, path: /api/token/refresh/
 
@@ -30,8 +29,8 @@ Filtration by the status and date - GET /api/v1/tasks/?status=overdue&due_date__
 
 Filtration by the title or description = GET /api/v1/tasks/?search=Task N1
 
---------------------------------------------------------------------------------------------------------------------------------------------------------|
-Tests
+
+Tests/
 
 run command -  `docker-compose exec web sh`, and then run - `pytest test_tasks.py`
 
