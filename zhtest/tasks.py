@@ -11,7 +11,14 @@ def send_task_notification(task_id):
 
 @shared_task
 def check_overdue_tasks():
-    from myapp.models import Task
-    overdue_tasks = Task.objects.filter(status='pending', due_date__lt=timezone.now())
+    from myapp.models import Task, Notification
+    overdue_tasks = Task.objects.filter(due_date__lt=timezone.now()).exclude(status='overdue')
     for task in overdue_tasks:
-        send_task_notification.delay(task.id)
+        task.status = 'overdue'
+        task.save()
+
+        if not Notification.objects.filter(task=task).exists():
+            Notification.objects.create(
+                task=task,
+                message=f"Задача {task.title} просрочена."
+            )
