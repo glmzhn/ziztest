@@ -18,4 +18,12 @@ The whole API Documentation is available on the path: /api/v1/schema/docs/
 
 The admin panel is available on the path: /admin
 
+Filtration by the status - GET /api/v1/tasks/?status=pending
+
+Filtration by the date = GET /api/v1/tasks/?due_date=2024-10-24
+
+Filtration by the status and date - GET /api/v1/tasks/?status=overdue&due_date__lt=2024-10-24
+
+Filtration by the title or description = GET /api/v1/tasks/?search=Task N1
+
 Good luck ;)
